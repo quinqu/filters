@@ -116,11 +116,9 @@ public class PixelImage
   
   
   public static Pixel[][] weightedAverage(int SCALE, Pixel[][] pi, Pixel[][] pi2,int[][] weights, int h, int w) {
-	
 	  int weighRed1=0;
 	  int weighBlue1=0;
 	  int weighGreen1=0;
-	  
 	  
 	  int lastRow = pi2.length - 1;
 	  int lastCol = pi2[0].length - 1;
@@ -132,12 +130,12 @@ public class PixelImage
 	      pi2[i][lastCol] = pi[i][lastCol];
 	  }
 
-
 	  for (int i=1; i< h-1;i++) {
 		  
 		  for(int j=1;j< w-1;j++) {
 
-			 
+
+			  
 			  Pixel pixTL = pi[i-1][j-1];
 			  Pixel pixTM = pi[i-1][j];
 			  Pixel pixTR = pi[i-1][j+1];
@@ -148,6 +146,9 @@ public class PixelImage
 			  Pixel pixBM=pi[i+1][j];
 			  Pixel pixBR=pi[i+1][j+1];
 			  
+	
+
+			  
 			  weighRed1 = (((pixTL.red * weights[0][0]) + (pixTM.red*weights[0][1]) + (pixTR.red*weights[0][2])+ 
 					  (pixL.red * weights[1][0]) + (middle.red*weights[1][1]) + (pixR.red*weights[1][2]) + 
 					  (pixBL.red * weights[2][0]) + (pixBM.red * weights[2][1]) + (pixBR.red * weights[2][2]))/SCALE);
@@ -157,33 +158,21 @@ public class PixelImage
 			  weighGreen1 =(((pixTL.green * weights[0][0])+ (pixTM.green*weights[0][1]) + (pixTR.green*weights[0][2])+
 					  (pixL.green * weights[1][0])+ (middle.green * weights[1][1]) + (pixR.green*weights[1][2])+ (pixBL.green * weights[2][0])+ 
 					  (pixBM.green*weights[2][1]) + (pixBR.green*weights[2][2]))/SCALE); 
+
 			  
-			 
-           
-			  
-			  
-			  weighBlue1 =(((pixTL.blue * weights[0][0])+ (pixTM.blue*weights[0][1]) + (pixTR.blue*weights[0][2])+
+			   weighBlue1 =(((pixTL.blue * weights[0][0])+ (pixTM.blue*weights[0][1]) + (pixTR.blue*weights[0][2])+
 					  (pixL.blue * weights[1][0])+ (middle.blue*weights[1][1])+(pixR.blue * weights[1][2])+ 
 					  (pixBL.blue * weights[2][0])+ (pixBM.blue * weights[2][1]) + (pixBR.blue * weights[2][2]))/SCALE); 
 			  
 
-			  	
-			  	
 			  
 			  
-			  withinRange(weighRed1,weighBlue1,weighGreen1);
-			  	
-			  Pixel finalPix = new Pixel(weighRed1,weighGreen1, weighBlue1);
-
-      	      pi2[i][j]= finalPix;
-
-      	    
+			  
+      	      pi2[i][j]= withinRange(weighRed1, weighBlue1, weighGreen1);
 		  }
-		  
+  
 	  }
 
-	  
- 
 	return pi2;   
   
   }
@@ -197,7 +186,7 @@ public class PixelImage
    * 
    */
   
-  public static void withinRange(int weighRed, int weighBlue, int weighGreen) {
+  public static Pixel withinRange(int weighRed, int weighBlue, int weighGreen) {
 	  
   	
       if(weighRed < 0) {
@@ -206,33 +195,29 @@ public class PixelImage
       }else if(weighRed > 255) {             
       	weighRed = 255;
       }
+      
+      
       if(weighGreen < 0) {
       	weighGreen = 0;
       	
       }else if(weighGreen > 255) {             
     	  weighGreen = 255;
       }
+      
       if(weighBlue < 0) {
     	  weighBlue = 0;
+    	  
       }else if(weighBlue > 255) {             
     	  weighBlue = 255;
       }
-     
+      
+      Pixel newPixel = new Pixel(weighRed, weighGreen, weighBlue);
+      
+      return newPixel;
+      
+      
+
   }
   
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
